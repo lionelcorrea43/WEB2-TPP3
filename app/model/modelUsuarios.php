@@ -1,0 +1,26 @@
+<?php
+require_once('app/model/model.php');
+class modelUsuarios extends Model
+{
+
+
+    function registro($userEmail, $userPassword)
+    {
+        //Guardo el nuevo usuario en la base de datos
+        $db = $this->db;
+        $query = $db->prepare('INSERT INTO usuarios (email, password) VALUES (? , ?)');
+        $query->execute([$userEmail, $userPassword]);
+    }
+
+
+    function existeUsuario($name)
+    {
+        $db =$this->db;
+        $sentencia = $db->prepare("SELECT * FROM usuarios WHERE email = ?");
+        $sentencia->execute([$name]); // Ejecutamos la consulta
+
+        $usuario = $sentencia->fetch(PDO::FETCH_OBJ); // Obtenemos los datos (para generar el HTML)
+        return $usuario;
+    }
+}
+
