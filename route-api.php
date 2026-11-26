@@ -19,8 +19,8 @@ $router->addRoute('equipos', 'POST', 'ApiControllerEquipos', 'addEquipo');
 $router->addRoute('jugadores/:ID', 'DELETE', 'ApiControllerJugadores', 'eliminarJugador');
 $router->addRoute('equipos/:ID', 'DELETE', 'ApiControllerEquipos', 'eliminarEquipo');
 
-$router->addRoute('jugadores/:ID', 'PUT', 'ApiControllerJugadores', 'finalizarTarea');
-$router->addRoute('equipos/:ID', 'PUT', 'ApiControllerEquipos', 'finalizarTarea');
+// $router->addRoute('jugadores/:ID', 'PUT', 'ApiControllerJugadores', 'finalizarTarea');
+$router->addRoute('equipos/:ID', 'PUT', 'ApiControllerEquipos', 'updateEquipo');
 
 //auth user
 $router->addRoute('auth', 'POST', 'AuthController', 'login');

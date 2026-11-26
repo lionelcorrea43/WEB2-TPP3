@@ -39,10 +39,9 @@ class modelEquipos extends Model
 
         $db = $this->db;
         $sentencia = $db->prepare("UPDATE equipo SET nombre = ?, fundacion = ?, pais = ?, imagen = ? WHERE id_equipo = ?");
-        $sentencia->execute([$nombre, $fundacion, $pais, $imagen, $id_equipo]);
+       return $sentencia->execute([$nombre, $fundacion, $pais, $imagen, $id_equipo]);
+       
     }
-
-
 
 
     function deleteEquipo($id)

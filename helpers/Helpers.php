@@ -24,7 +24,7 @@ class Helpers{
             );
             
             //Agregamos al payload un tiempo (ES OPCIONAL)
-            $payload['exp'] = time() + 120; //tiempo de 1 minuto para uso práctico
+            $payload['exp'] = time() + 120000; //tiempo de 1 minuto para uso práctico
             
             $header = $this->base64url_encode(json_encode($header));
             $payload = $this->base64url_encode(json_encode($payload));

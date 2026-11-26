@@ -30,17 +30,21 @@ class ApiControllerEquipos
         // $data->imagen = $_FILES['imagen']['name'] ?? null;
         // return $data;
         if (!empty($_POST) || !empty($_FILES)) {
-        $data = $_POST;
+            $data = $_POST;
 
-        if (!empty($_FILES['imagen'])) {
-            $data['imagen'] = $_FILES['imagen'];
-        }
+            if (!empty($_FILES['imagen'])) {
+                $data['imagen'] = $_FILES['imagen'];
+            }
 
-        return (object) $data;
-        
-
+            return (object) $data;
         }
     }
+    function obtenerNuevosDatos()
+{
+    $body = file_get_contents('php://input');
+    $data = json_decode($body);
+    return $data;
+}
 
     public function resolverImagen($imagen)
     {
@@ -129,7 +133,7 @@ class ApiControllerEquipos
         $user = $this->authHelper->currentUser();
         if ($user) {
             $equipoNuevo = $this->obtenerDatosEquipo();
-              $imagen = $this->resolverImagen($equipoNuevo->imagen ?? null);
+            $imagen = $this->resolverImagen($equipoNuevo->imagen ?? null);
 
             //var_dump($equipoNuevo);die();
 
@@ -145,6 +149,37 @@ class ApiControllerEquipos
                 $this->view->response("El equipo se insertó correctamente con id: $lastId", 200);
             } else {
                 $this->view->response("No se pudo insertar correctamente el jugador", 404);
+            }
+        } else {
+            $this->view->response("Sin autorizacion", 401);
+        }
+    }
+
+    public function updateEquipo($params = null)
+    {
+        $user = $this->authHelper->currentUser();
+        if ($user) {
+            $id = $params[':ID'];
+
+            $equipoNuevo = $this->obtenerNuevosDatos();
+            
+            $imagen = $this->resolverImagen($equipoNuevo->imagen ?? null);
+
+            //var_dump($equipoNuevo);die();
+
+            $lastId = $this->model->updateEquipo(
+                $id,
+                $equipoNuevo->nombre,
+                $equipoNuevo->fundacion,
+                $equipoNuevo->pais,
+                $imagen
+            );
+
+
+            if ($lastId) {
+                $this->view->response("El equipo se edito correctamente con id: $id", 200);
+            } else {
+                $this->view->response("No se pudo editar correctamente el equipo", 404);
             }
         } else {
             $this->view->response("Sin autorizacion", 401);
