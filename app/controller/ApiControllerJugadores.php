@@ -180,6 +180,43 @@ class ApiControllerJugadores
         }
     }
 
+
+   function filtrarJugadores()
+    {
+        $user = $this->authHelper->currentUser();
+        if ($user) {
+
+
+            try {
+                // Obtiene una tarea del modelo
+                $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
+                $orden = isset($_GET['orden']) ? $_GET['orden'] : 'ASC';
+                $jugadores = $this->model->filtro($nombre, $orden);
+
+                // Si existe la tarea, la retorna con un código 200 (éxito)
+                if ($jugadores) {
+                    $response = [
+                        "status" => 200,
+                        "message" => $jugadores
+                    ];
+                    $this->view->response($response, 200);
+                } else {
+                    $response = [
+                        "status" => 404,
+                        "message" => "No existe la jugadores en la base de datos."
+                    ];
+                    $this->view->response($response, 404);
+                }
+            } catch (Exception $e) {
+                // En caso de error del servidor, devolver un mensaje con un código 500 (error del servidor)
+                $this->view->response("Error de servidor", 500);
+            }
+        } else {
+            $this->view->response("Sin autorizacion", 401);
+        }
+    }
+
+
     public function eliminarJugador($params = null)
     {
         $user = $this->authHelper->currentUser();

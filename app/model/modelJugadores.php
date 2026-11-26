@@ -48,6 +48,26 @@ class modelJugadores extends Model{
         return $sentencia->execute([$equipo, $fecha_nacimiento, $nombre, $apellido, $sueldo, $posicion, $imagen, $id]);
     }
 
+function filtro($nombre, $orden){
+        $db = $this->db; // Abrimos  una conexión
+        $orden= strtoupper($orden);
+        if($orden !== 'ASC' && $orden !== 'DESC'){
+            $order = 'ASC';
+        }
+        $sql= "SELECT * FROM jugador ";
+        $params=[];
+        //si viene un nombre le agregamos la condicion where a la consulta
+        $sql .=" WHERE nombre LIKE ? ";
+        $params[] = "%" . $nombre . "%";
+        //concatenamos el order by q ya fue reviamente revisado
+        $sql .= " ORDER BY id_jugador ". $orden;
+        $sentencia=$db->prepare($sql);
+        $sentencia->execute($params);
+        $jugadores= $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $jugadores;
+
+    }
+
     function findJugadorByEquipo($id){
         $db = $this->db; // Abrimos  una conexión
 

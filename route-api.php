@@ -13,6 +13,8 @@ $router->addRoute('equipos', 'GET', 'ApiControllerEquipos', 'getEquipos');
 $router->addRoute('jugadores/:ID', 'GET', 'ApiControllerJugadores', 'jugadorPorId');
 $router->addRoute('equipos/:ID', 'GET', 'ApiControllerEquipos', 'equipoPorId');
 
+$router->addRoute('jugadoresFiltro', 'GET', 'ApiControllerJugadores', 'filtrarJugadores');
+
 $router->addRoute('jugadores', 'POST', 'ApiControllerJugadores', 'addJugador');
 $router->addRoute('equipos', 'POST', 'ApiControllerEquipos', 'addEquipo');
 
