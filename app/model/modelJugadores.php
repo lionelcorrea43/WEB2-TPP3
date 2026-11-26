@@ -41,11 +41,11 @@ class modelJugadores extends Model{
         return $db->lastInsertId();
     }
 
-    function updateJugador($equipo, $fecha_nacimiento, $nombre, $apellido, $sueldo,$posicion, $imagen, $jugador)
+    function updateJugador($equipo, $fecha_nacimiento, $nombre, $apellido, $sueldo, $posicion, $imagen, $id)
     {
         $db = $this->db;
         $sentencia = $db->prepare("UPDATE jugador SET id_equipo = ?, fecha_nacimiento = ?, nombre = ?, apellido = ?, sueldo = ?, posicion = ?, imagen = ? WHERE id_jugador = ?");
-        $sentencia->execute([$equipo, $fecha_nacimiento, $nombre, $apellido, $sueldo, $posicion, $imagen, $jugador->id_jugador]);
+        return $sentencia->execute([$equipo, $fecha_nacimiento, $nombre, $apellido, $sueldo, $posicion, $imagen, $id]);
     }
 
     function findJugadorByEquipo($id){

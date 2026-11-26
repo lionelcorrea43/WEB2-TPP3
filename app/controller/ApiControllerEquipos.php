@@ -10,7 +10,6 @@ class ApiControllerEquipos
     private $view;
     private $authHelper;
 
-
     function __construct()
     {
         $this->model = new modelEquipos;
@@ -20,15 +19,7 @@ class ApiControllerEquipos
 
     function obtenerDatosEquipo()
     {
-        // $data = new stdClass();
-        // $data->equipo = $_POST['equipo'] ?? null;
-        // $data->fecha_nacimiento = $_POST['fecha_nacimiento'] ?? null;
-        // $data->nombre = $_POST['nombre'] ?? null;
-        // $data->apellido = $_POST['apellido'] ?? null;
-        // $data->sueldo = $_POST['sueldo'] ?? null;
-        // $data->posicion = $_POST['posicion'] ?? null;
-        // $data->imagen = $_FILES['imagen']['name'] ?? null;
-        // return $data;
+
         if (!empty($_POST) || !empty($_FILES)) {
             $data = $_POST;
 
@@ -39,7 +30,7 @@ class ApiControllerEquipos
             return (object) $data;
         }
     }
-    function obtenerNuevosDatos()
+    function obtenerNuevosDatosEquipo()
 {
     $body = file_get_contents('php://input');
     $data = json_decode($body);
@@ -146,9 +137,9 @@ class ApiControllerEquipos
 
 
             if ($lastId) {
-                $this->view->response("El equipo se insertó correctamente con id: $lastId", 200);
+                $this->view->response("El equipo se insertó correctamente con id: $lastId", 201);
             } else {
-                $this->view->response("No se pudo insertar correctamente el jugador", 404);
+                $this->view->response("No se pudo insertar correctamente el equipo", 404);
             }
         } else {
             $this->view->response("Sin autorizacion", 401);
@@ -161,7 +152,7 @@ class ApiControllerEquipos
         if ($user) {
             $id = $params[':ID'];
 
-            $equipoNuevo = $this->obtenerNuevosDatos();
+            $equipoNuevo = $this->obtenerNuevosDatosEquipo();
             
             $imagen = $this->resolverImagen($equipoNuevo->imagen ?? null);
 
@@ -174,8 +165,6 @@ class ApiControllerEquipos
                 $equipoNuevo->pais,
                 $imagen
             );
-
-
             if ($lastId) {
                 $this->view->response("El equipo se edito correctamente con id: $id", 200);
             } else {
@@ -185,9 +174,6 @@ class ApiControllerEquipos
             $this->view->response("Sin autorizacion", 401);
         }
     }
-
-
-
 
     function eliminarEquipo($params = null)
     {

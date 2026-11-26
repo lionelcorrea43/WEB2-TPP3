@@ -10,8 +10,8 @@ $router = new Router();
 // GET http://localhost/api/noticias 
 $router->addRoute('jugadores', 'GET', 'ApiControllerJugadores', 'getJugadores');
 $router->addRoute('equipos', 'GET', 'ApiControllerEquipos', 'getEquipos');
-$router->addRoute('jugador/:ID', 'GET', 'ApiControllerJugadores', 'jugadorPorId');
-$router->addRoute('equipo/:ID', 'GET', 'ApiControllerEquipos', 'equipoPorId');
+$router->addRoute('jugadores/:ID', 'GET', 'ApiControllerJugadores', 'jugadorPorId');
+$router->addRoute('equipos/:ID', 'GET', 'ApiControllerEquipos', 'equipoPorId');
 
 $router->addRoute('jugadores', 'POST', 'ApiControllerJugadores', 'addJugador');
 $router->addRoute('equipos', 'POST', 'ApiControllerEquipos', 'addEquipo');
@@ -19,7 +19,7 @@ $router->addRoute('equipos', 'POST', 'ApiControllerEquipos', 'addEquipo');
 $router->addRoute('jugadores/:ID', 'DELETE', 'ApiControllerJugadores', 'eliminarJugador');
 $router->addRoute('equipos/:ID', 'DELETE', 'ApiControllerEquipos', 'eliminarEquipo');
 
-// $router->addRoute('jugadores/:ID', 'PUT', 'ApiControllerJugadores', 'finalizarTarea');
+$router->addRoute('jugadores/:ID', 'PUT', 'ApiControllerJugadores', 'updateJugador');
 $router->addRoute('equipos/:ID', 'PUT', 'ApiControllerEquipos', 'updateEquipo');
 
 //auth user

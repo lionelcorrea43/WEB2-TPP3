@@ -20,26 +20,19 @@ class ApiControllerJugadores
 
     function obtenerDatosJugador()
     {
-        // $data = new stdClass();
-        // $data->equipo = $_POST['equipo'] ?? null;
-        // $data->fecha_nacimiento = $_POST['fecha_nacimiento'] ?? null;
-        // $data->nombre = $_POST['nombre'] ?? null;
-        // $data->apellido = $_POST['apellido'] ?? null;
-        // $data->sueldo = $_POST['sueldo'] ?? null;
-        // $data->posicion = $_POST['posicion'] ?? null;
-        // $data->imagen = $_FILES['imagen']['name'] ?? null;
-        // return $data;
         if (!empty($_POST) || !empty($_FILES)) {
-        $data = $_POST;
-
-        if (!empty($_FILES['imagen'])) {
-            $data['imagen'] = $_FILES['imagen'];
+            $data = $_POST;
+            if (!empty($_FILES['imagen'])) {
+                $data['imagen'] = $_FILES['imagen'];
+            }
+            return (object) $data;
         }
-
-        return (object) $data;
-        
-
-        }
+    }
+    function obtenerNuevosDatosJugador()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body);
+        return $data;
     }
 
     public function resolverImagen($imagen)
@@ -133,7 +126,7 @@ class ApiControllerJugadores
         if ($user) {
             $jugadorNuevo = $this->obtenerDatosJugador();
             $imagen = $this->resolverImagen($jugadorNuevo->imagen ?? null);
-            
+
 
             $lastId = $this->model->saveJugador(
                 $jugadorNuevo->equipo,
@@ -146,7 +139,7 @@ class ApiControllerJugadores
             );
 
             if ($lastId) {
-                $this->view->response("El jugador se insertó correctamente con id: $lastId", 200);
+                $this->view->response("El jugador se insertó correctamente con id: $lastId", 201);
             } else {
                 $this->view->response("No se pudo insertar correctamente el jugador", 404);
             }
@@ -155,11 +148,37 @@ class ApiControllerJugadores
         }
     }
 
+    public function updateJugador($params = null)
+    {
+        $user = $this->authHelper->currentUser();
+        if ($user) {
+            $id = $params[':ID'];
 
+            $JugadorNuevo = $this->obtenerNuevosDatosJugador();
 
+            $imagen = $this->resolverImagen($JugadorNuevo->imagen ?? null);
 
+            //var_dump($JugadorNuevo);die();
 
-
+            $lastId = $this->model->updateJugador(
+                $JugadorNuevo->id_equipo,
+                $JugadorNuevo->fecha_nacimiento,
+                $JugadorNuevo->nombre,
+                $JugadorNuevo->apellido,
+                $JugadorNuevo->sueldo,
+                $JugadorNuevo->posicion,
+                $imagen,
+                $id
+            );
+            if ($id) {
+                $this->view->response("El jugador se edito correctamente con id: $id", 200);
+            } else {
+                $this->view->response("No se pudo editar correctamente el jugador", 404);
+            }
+        } else {
+            $this->view->response("Sin autorizacion", 401);
+        }
+    }
 
     public function eliminarJugador($params = null)
     {
